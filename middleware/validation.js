@@ -39,6 +39,11 @@ function hasUnexpectedFields(obj, expectedFields) {
     return unexpectedKeys.length > 0;
   }
 
+const validateMobile = (mobileNo)=>{
+    const regex = /^(?:\+91)?[6-9]\d{9}$/;
+    return regex.test(mobileNo);
+}
 module.exports = {
-    validateUpdateRequest
+    validateUpdateRequest,
+    validateMobile
 };

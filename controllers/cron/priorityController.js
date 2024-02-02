@@ -1,4 +1,4 @@
-import Task from '../../models/model.task.js';
+const {Task} = require('../../models/model.task.js');
 const {tasksList} = require('../../util/localData');
 const {overdueTasksQueue} = require('../../util/localData');
 
@@ -27,4 +27,4 @@ const daysAway = (date) => {
     return diffDays;
 }
 
-export default priorityCron;
+module.exports = priorityCron;

@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
-import Task from '../models/model.task.js';
-import SubTask from '../models/model.subtask.js';
-const {taskPriority} = require("../util/priority.js")
-import BadRequestError from '../util/errors/bad-request.js';
+const {Task} = require('../models/model.task.js');
+const {SubTask} = require('../models/model.subtask.js');
+const {taskPriority} = require("../util/priority.js");
+const { validateMobile } = require('../middleware/validation.js');
+const { StatusCodes } = require('http-status-codes');
+// import BadRequestError from '../util/errors/bad-request.js';
 
 const getAllUserTasks = async (req, res) => {
     try {
         const { user } = req.params;
-        const {limit, offset, sort_by} = req.query
-        const {priority, due_date, status} = req.body
+        const {priority, due_date, status, limit, offset, sort_by} = req.query
+
         const tasks = await Task.find(
             {
                 priority: priority,
@@ -33,8 +35,7 @@ const getAllUserTasks = async (req, res) => {
 const getAllUserSubTasks = async (req, res) => {
     try {
         const { id } = req.params;
-        const {limit, offset, sort_by} = req.query
-        const {task_id, status} = req.body
+        const {task_id, status, limit, offset, sort_by} = req.query
         var subtasks = [];
 
         if(task_id !== undefined){
@@ -68,14 +69,19 @@ const getAllUserSubTasks = async (req, res) => {
 }
 const createTask = async (req, res) => {
   try {
-    const { title, description, due_date } = req.body;
-    
+    const { title, description, due_date, users } = req.body;
+    users.forEach(user => {
+        if(!users.find({_id: user["user_id"]}))
+            res.status(StatusCodes.BAD_REQUEST).json({message: "Invalid User in list"});
+    });
+    //validate if no two users have the same priority
     const priority = taskPriority(due_date);
     const newTask = new Task({
       title,
       description,
       due_date,
-      priority
+      priority,
+      users
     });
     await newTask.save();
 
