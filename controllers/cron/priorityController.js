@@ -1,26 +1,32 @@
-const { Task } = require('../../models/model.task.js');
-const { tasksList, overdueTaskQueue, loadData, saveData } = require('../../util/dataStructures.js');
+const Task = require('../../models/model.task.js');
+const { loadData, saveData } = require('../../util/dataStructures.js');
 
 // Load data on initialization
-loadData();
+// (async()=> await console.log(loadData()));
 
 const priorityCron = async () => {
-  const pendingTasks = await Task.find({ status: { $ne: 'DONE' } });
-  overdueTaskQueue.push(...tasksList);
+  console.log(`-----------------Cron job for priority update-------------------`)
+  var {tasksList, overdueTaskQueue} = loadData();
+  try{
+      var pendingTasks = await Task.find({archived:false, status: { $ne: 'DONE' }, priority: { $ne: 0 }});
 
-  pendingTasks.filter((task) => daysAway(task.due_date) == 0);
-  pendingTasks.forEach(async (task) => {
-    if ([0, 1, 3, 5].includes(daysAway(task.due_date))) {
-      task.priority -= 1;
-      await task.save();
-      if (task.priority === 0) tasksList.push(task);
-    } else if (daysAway(task.due_date) === 0) {
-      overdueTaskQueue.push(task);
-    }
-  });
-
-  // Save data after processing
-  saveData();
+        overdueTaskQueue.push(...tasksList);
+        tasksList.length = 0;
+    
+      for(const task of pendingTasks){
+        if ([1, 3, 5].includes(daysAway(task.due_date))) {
+          task.priority -= 1;
+          await task.save();
+          if (task.priority === 0) tasksList.push(task);
+        }
+      };
+      // Save data after processing
+      await saveData({tasksList, overdueTaskQueue});
+  }
+  catch(error){
+    console.error(error)
+  }
+    console.log(`-----------------Priority update completed-------------------`)    
 };
 
 const daysAway = (date) => {

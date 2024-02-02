@@ -1,39 +1,35 @@
 const cron = require('node-cron')
-const {priorityCron} = require('./priorityController')
-const {reminderCron} = require('./reminderController')
+const priorityCron = require('./priorityController')
+const reminderCron = require('./reminderController')
 
 function cronBootstrap() {
   console.log("\nBootstrapping cron jobs...")
   try{
-    cron.schedule('0 0 * * *', ()=>{
-      console.log(`-----------------Cron job for priority update-------------------`)
-      priorityCron();
-    },{
+    cron.schedule('0 0 * * *', priorityCron,
+    {
       scheduled: true,
       timezone: 'Asia/Kolkata'
     })
     console.log("Priority update [ok]------------------ 1/2")
   }
   catch(error){
-    console.err("Priority update [failed]------------------ 1/2")
+    console.log("Priority update [failed]------------------ 1/2")
     console.log(error)
   }
     
     try{
-      cron.schedule('0 10 * * *', ()=>{
-      console.log(`----------------Cron job for overdue reminders------------------`)
-      reminderCron();
-    },{
+      cron.schedule('0 10 * * *', reminderCron,
+      {
       scheduled: true,
       timezone: 'Asia/Kolkata'
     })
     console.log("Overdue Reminder [ok]------------------ 2/2")
   }
   catch(error){
-    console.err("Overdue Reminder [failed]------------------ 2/2")
+    console.log("Overdue Reminder [failed]------------------ 2/2")
     console.log(error)
   }
-  console.log("Cron jobs running\n")
+  console.log("Cron jobs scheduled successfully\n")
 }
 
 module.exports = cronBootstrap;

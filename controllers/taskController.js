@@ -15,9 +15,7 @@ const getAllUserTasks = async (req, res) => {
 
         const tasks = await Task.find(
             {
-                // priority: priority,
                 users: {$elemMatch:{_id : user}},
-                // archived: false
             });
         const response = {
             data: tasks,
@@ -218,13 +216,16 @@ const deleteTask = async (req, res) => {
 const deleteSubTask = async (req, res) => {
     const { id } = req.params;
     try {
-        // const session = mongoose.startSession();
-
         const deletedSubTask = await SubTask.findOneAndUpdate(id, {archived : true});
         const ParentTask = await Task.findOne({_id : deletedSubTask.task_id});
         ParentTask.total_subtask -= 1;
-        if(deletedSubTask.status === 1)
+        if(deletedSubTask.status === 1){
             ParentTask.completed_subtask -= 1;
+            if(ParentTask.completed_subtask == 0)
+                ParentTask.status = "TODO";
+            else
+                ParentTask.status = "IN_PROGRESS";
+        }
         else
             if(ParentTask.completed_subtask == ParentTask.total_subtask || ParentTask.total_subtask == 0)
                 ParentTask.status = "DONE";

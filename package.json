@@ -8,15 +8,13 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.1.1",
     "node-cron": "^3.0.3",
-    "passport": "^0.6.0",
-    "passport-totp": "^0.0.2",
     "twilio": "^4.11.2"
   },
   "name": "task-api",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon --ignore './util/data.json' app.js",
     "test": "artillery run test/test.yml"
   },
   "keywords": [],

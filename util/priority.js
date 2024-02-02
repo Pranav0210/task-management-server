@@ -13,9 +13,9 @@ const taskPriority = (dueDate)=> {
     switch (true) {
       case daysDifference === 0:
         return 0; // Due date is today
-      case daysDifference === 1:
+      case daysDifference <= 2:
         return 1; // Due date is between tomorrow and day after tomorrow
-      case daysDifference <= 3:
+      case daysDifference <= 4:
         return 2; // Due date is within 3-4 days
       default:
         return 3; // Due date is within 5-7 days // Due date is 8 days or more

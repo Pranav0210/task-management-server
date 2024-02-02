@@ -11,6 +11,7 @@ const dbConnect = require('./db');
 const cronBootstrap = require('./controllers/cron/cronIndex')
 
 const app = express()
+cronBootstrap();
 
 app.use(cors())
 app.use(helmet())
@@ -26,8 +27,7 @@ const PORT = process.env.PORT;
 async function start(){
   try {
     await dbConnect(process.env.MONGO_URI);
-    app.listen(PORT, () => console.log(`Server live... \nlistening on port ${PORT}...`));
-    cronBootstrap();
+    app.listen(PORT, () => console.log(`Server live [v1.0.0] \nlistening on port ${PORT}...`));
 
   } catch (error) {
     console.log(error);
