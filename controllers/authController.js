@@ -9,13 +9,13 @@ const register = async (req, res) => {
     try {
       // 1. Check if the user exist
       const user = await User.findOne({phone_number: phone_number});
-      console.log(user)
+      // console.log(user)
       if (user)
-        res.status(StatusCodes.BAD_REQUEST).json({error: "User already exist"});
+        return res.status(StatusCodes.BAD_REQUEST).json({error: "User already exist"});
       // throw new Error('User already exist');
 
       if(!validateMobile(phone_number))
-        res.status(StatusCodes.BAD_REQUEST).json({error: "Invalid Mobile Number"});
+        return res.status(StatusCodes.BAD_REQUEST).json({error: "Invalid Mobile Number"});
 
       // 2. If not user exist already, hash the password
       // const hashedPassword = await hash(password, 10); // ommited from implementation for now
@@ -27,12 +27,12 @@ const register = async (req, res) => {
       });
 
       console.log(newUser);
-      res.status(StatusCodes.CREATED).json({ 
+      return res.status(StatusCodes.CREATED).json({ 
         message : 'User Created',
         user_id : newUser._id 
       });
     } catch (err) {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         error: `${err.message}`,
       });
     }

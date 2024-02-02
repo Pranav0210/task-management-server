@@ -1,5 +1,5 @@
 const validateUpdateRequest = (req, res, next) => {
-    if(req.path == '/updateTask'){
+    if(req.path == '/update-task'){
         const expectedFields = ['status','due_date'];
         const hasUnexpected = hasUnexpectedFields(req.body, expectedFields);
         if (hasUnexpected) {
@@ -12,7 +12,7 @@ const validateUpdateRequest = (req, res, next) => {
             return res.status(400).send(`Nothing to update`);
         }
     }
-    if(req.path == '/updateSubTask'){
+    if(req.path == '/update-subTask'){
         const expectedFields = ['status'];
         const hasUnexpected = hasUnexpectedFields(req.body, expectedFields);
         if (hasUnexpected) {
@@ -20,9 +20,6 @@ const validateUpdateRequest = (req, res, next) => {
         }
     }
     if(req.body.hasOwnProperty('title')){
-    }
-    if (!title || !description || !due_date) {
-        res.status(400).send("Invalid Request");
     }
     else {
         next();

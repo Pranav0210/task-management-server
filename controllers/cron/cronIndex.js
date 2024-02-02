@@ -14,8 +14,9 @@ function cronBootstrap() {
     })
     console.log("Priority update [ok]------------------ 1/2")
   }
-  catch(err){
+  catch(error){
     console.err("Priority update [failed]------------------ 1/2")
+    console.log(error)
   }
     
     try{
@@ -28,8 +29,9 @@ function cronBootstrap() {
     })
     console.log("Overdue Reminder [ok]------------------ 2/2")
   }
-  catch(err){
+  catch(error){
     console.err("Overdue Reminder [failed]------------------ 2/2")
+    console.log(error)
   }
   console.log("Cron jobs running\n")
 }

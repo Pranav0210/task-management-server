@@ -9,11 +9,11 @@ router.get('/user-subtasks/:user', getAllUserSubTasks)
 router.post('/create-task', createTask)
 router.post('/create-subtask', createSubTask)
 
-router.delete('/delete-task/:id', deleteTask)
-router.delete('/delete-subtask/:id', deleteSubTask)
+router.delete('/delete-task/:task', deleteTask)
+router.delete('/delete-subtask/:task', deleteSubTask)
 
 router.use(validateUpdateRequest)
-router.patch('/update-task/:id', updateTask)
-router.patch('/update-subtask/:id', updateSubTask)
+router.put('/update-task/:user', updateTask)
+router.put('/update-subtask/:user', updateSubTask)
 
 module.exports = router
