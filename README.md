@@ -8,8 +8,7 @@ Install the dependencies:
 npm install
 ```
 
-Set the environment variables and create required util file:
-   --run below commands as they are in the root directory
+Set the environment variables and create required util file. (run below commands *as they are* in the root directory)
 
 ```bash
 touch .env
